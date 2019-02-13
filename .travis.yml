@@ -21,7 +21,6 @@ before_install:
 install:
   - "python setup.py install"
   - "pip install coveralls"
-  - "pip install -r requirements.txt"
 script:
   - "nosetests --with-coverage --cover-package=oseti"
 after_success:

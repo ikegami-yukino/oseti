@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 from codecs import open
 import os
+import platform
 import re
 from setuptools import setup
+
+if platform.system() == 'Windows':
+    mecab = ['mecab-python-windows']
+else:
+    mecab = ['mecab-python3==0.7']
+
 
 with open(os.path.join('oseti', '__init__.py'), 'r', encoding='utf8') as f:
     version = re.compile(
@@ -31,9 +38,10 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Topic :: Text Processing :: Linguistic'
-        ],
+    ],
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),
                                    open('CHANGES.rst', encoding='utf8').read()),
     package_data={'oseti': ['dic/*.json']},
+    install_requires=['neologdn'] + mecab,
     test_suite='nose.collector'
 )
