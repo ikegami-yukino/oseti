@@ -13,11 +13,12 @@ DICT_DIR = os.path.join(os.path.dirname(__file__), 'dic')
 
 class Analyzer(object):
 
-    def __init__(self, mecab_args=''):
+    def __init__(self, mecab_args='', raw_score=False):
         self.word_dict = json.load(open(os.path.join(DICT_DIR, 'pn_noun.json')))
         self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
         self.tagger = MeCab.Tagger(mecab_args)
         self.tagger.parse('')  # for avoiding bug
+        self.raw_score = raw_score
 
     def _split_per_sentence(self, text):
         for sentence in re_delimiter.split(text):
@@ -56,6 +57,10 @@ class Analyzer(object):
                         polarities[-1] *= -1
                 lemmas.append(lemma)
             node = node.next
+        if self.raw_score:
+            if not polarities:
+                return (0, 0)
+            return (sum(polarities), len(polarities))
         if not polarities:
             return 0
         return sum(polarities) / len(polarities)

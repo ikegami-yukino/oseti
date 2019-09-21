@@ -26,9 +26,20 @@ class TestAnalyzer(object):
         assert_equal(actual, -1)
         actual = a._calc_sentiment_polarity('どうでもいい')
         assert_equal(actual, 0)
+        a = oseti.Analyzer(raw_score=True)
+        actual = a._calc_sentiment_polarity('最高な仕事')
+        assert_equal(actual, (1, 1))
+        actual = a._calc_sentiment_polarity('貪欲じゃないじゃない。')
+        assert_equal(actual, (-1, 1))
+        actual = a._calc_sentiment_polarity('どうでもいい')
+        assert_equal(actual, (0, 0))
 
     def test_analyze(self):
         a = oseti.Analyzer()
         text = '遅刻したけど楽しかったし嬉しかった。すごく充実した！'
         actual = a.analyze(text)
         assert_equal(actual, [0.3333333333333333, 1.0])
+        a = oseti.Analyzer(raw_score=True)
+        text = '遅刻したけど楽しかったし嬉しかった。すごく充実した！'
+        actual = a.analyze(text)
+        assert_equal(actual, [(1, 3), (1, 1)])
