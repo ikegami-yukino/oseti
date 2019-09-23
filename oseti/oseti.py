@@ -36,7 +36,6 @@ class Analyzer(object):
     def _calc_sentiment_polarity(self, sentence):
         polarities = []
         lemmas = []
-        polarity_apeared = False
         node = self.tagger.parseToNode(sentence)
         while node:
             if 'BOS/EOS' not in node.feature:
@@ -46,20 +45,38 @@ class Analyzer(object):
                 if lemma in self.word_dict:
                     polarity = 1 if self.word_dict[lemma] == 'p' else -1
                     polarities.append(polarity)
-                    polarity_apeared = True
                 else:
                     polarity = self._lookup_wago(lemma, lemmas)
                     if polarity is not None:
                         polarities.append(polarity)
-                        polarity_apeared = True
-                    elif polarity_apeared and surface in NEGATION:
+                    elif polarities and surface in NEGATION:
                         polarities[-1] *= -1
                 lemmas.append(lemma)
             node = node.next
-        if not polarities:
-            return 0
-        return sum(polarities) / len(polarities)
+        return polarities
 
+    def count_polarity(self, text):
+        """Calculate sentiment polarity counts per sentence
+        Arg:
+            text (str)
+        Return:
+            counts (list) : positive and negative counts per sentence
+        """
+        text = neologdn.normalize(text)
+        counts = []
+        for sentence in self._split_per_sentence(text):
+            count = {'positive': 0, 'negative': 0}
+            polarities = self._calc_sentiment_polarity(sentence)
+            for polarity in polarities:
+                if polarity == 1:
+                    count['positive'] += 1
+                elif polarity == -1:
+                    count['negative'] += 1
+                else:
+                    pass
+            counts.append(count)
+        return counts
+    
     def analyze(self, text):
         """Calculate sentiment polarity scores per sentence
         Arg:
@@ -70,6 +87,9 @@ class Analyzer(object):
         text = neologdn.normalize(text)
         scores = []
         for sentence in self._split_per_sentence(text):
-            score = self._calc_sentiment_polarity(sentence)
-            scores.append(score)
+            polarities = self._calc_sentiment_polarity(sentence)
+            if polarities:
+                scores.append(sum(polarities) / len(polarities))
+            else:
+                scores.append(0)
         return scores
