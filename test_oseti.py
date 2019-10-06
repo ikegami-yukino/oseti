@@ -4,11 +4,6 @@ import oseti
 
 
 class TestAnalyzer(object):
-    def test_split_per_sentence(self):
-        a = oseti.Analyzer()
-        actual = a._split_per_sentence('今日は雨。明日は雪?')
-        assert_equal(len(list(actual)), 2)
-
     def test_lookup_wago(self):
         a = oseti.Analyzer()
         actual = a._lookup_wago('うんざり', [])
@@ -17,6 +12,7 @@ class TestAnalyzer(object):
         assert_equal(actual, -1)
         actual = a._lookup_wago('どうでもいい', [])
         assert_equal(actual, None)
+    def test_has_arujanai(self):
 
     def test_calc_sentiment_polarity(self):
         a = oseti.Analyzer()

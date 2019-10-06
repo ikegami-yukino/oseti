@@ -8,7 +8,7 @@ from setuptools import setup
 if platform.system() == 'Windows':
     mecab = ['mecab-python-windows']
 else:
-    mecab = ['mecab-python3==0.7']
+    mecab = ['mecab-python3']
 
 
 with open(os.path.join('oseti', '__init__.py'), 'r', encoding='utf8') as f:
@@ -41,6 +41,6 @@ setup(
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),
                                    open('CHANGES.rst', encoding='utf8').read()),
     package_data={'oseti': ['dic/*.json']},
-    install_requires=['neologdn'] + mecab,
+    install_requires=['sengiri', 'neologdn'] + mecab,
     test_suite='nose.collector'
 )

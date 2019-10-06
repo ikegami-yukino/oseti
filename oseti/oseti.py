@@ -5,6 +5,7 @@ import re
 
 import MeCab
 import neologdn
+import sengiri
 
 re_delimiter = re.compile("[。,．!\?]")
 NEGATION = ('ない', 'ず', 'ぬ')
@@ -18,11 +19,6 @@ class Analyzer(object):
         self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
         self.tagger = MeCab.Tagger(mecab_args)
         self.tagger.parse('')  # for avoiding bug
-
-    def _split_per_sentence(self, text):
-        for sentence in re_delimiter.split(text):
-            if sentence and not re_delimiter.match(sentence):
-                yield sentence
 
     def _lookup_wago(self, lemma, lemmas):
         if lemma in self.wago_dict:
@@ -64,7 +60,7 @@ class Analyzer(object):
         """
         text = neologdn.normalize(text)
         counts = []
-        for sentence in self._split_per_sentence(text):
+        for sentence in sengiri.tokenize(text):
             count = {'positive': 0, 'negative': 0}
             polarities = self._calc_sentiment_polarity(sentence)
             for polarity in polarities:
@@ -86,7 +82,7 @@ class Analyzer(object):
         """
         text = neologdn.normalize(text)
         scores = []
-        for sentence in self._split_per_sentence(text):
+        for sentence in sengiri.tokenize(text):
             polarities = self._calc_sentiment_polarity(sentence)
             if polarities:
                 scores.append(sum(polarities) / len(polarities))
