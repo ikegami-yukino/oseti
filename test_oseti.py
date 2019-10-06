@@ -13,6 +13,11 @@ class TestAnalyzer(object):
         actual = a._lookup_wago('どうでもいい', [])
         assert_equal(actual, None)
     def test_has_arujanai(self):
+        a = oseti.Analyzer()
+        actual = a._has_arujanai('やる気あるじゃない')
+        assert_equal(actual, True)
+        actual = a._has_arujanai('やる気ないじゃない')
+        assert_equal(actual, False)
 
     def test_calc_sentiment_polarity(self):
         a = oseti.Analyzer()

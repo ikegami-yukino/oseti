@@ -29,6 +29,9 @@ class Analyzer(object):
                 return 1 if self.wago_dict[wago].startswith('ポジ') else -1
         return None
 
+    def _has_arujanai(self, substring):
+        return 'あるじゃない' in substring
+
     def _calc_sentiment_polarity(self, sentence):
         polarities = []
         lemmas = []
