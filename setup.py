@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 from codecs import open
 import os
-import platform
+import pkgutil
 import re
 from setuptools import setup
 
-if platform.system() == 'Windows':
-    mecab = ['mecab-python-windows']
-else:
-    mecab = ['mecab-python3']
-
+install_requires = [] if pkgutil.find_loader('MeCab') else ['mecab']
 
 with open(os.path.join('oseti', '__init__.py'), 'r', encoding='utf8') as f:
     version = re.compile(
@@ -42,6 +38,7 @@ setup(
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),
                                    open('CHANGES.rst', encoding='utf8').read()),
     package_data={'oseti': ['dic/*.json']},
-    install_requires=['sengiri', 'neologdn'] + mecab,
+    install_requires=['sengiri', 'neologdn'] + install_requires,
+    tests_require=['nose'],
     test_suite='nose.collector'
 )
