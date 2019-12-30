@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-import re
 
 import MeCab
-import neologdn
 import sengiri
 
 NEGATION = ('ない', 'ず', 'ぬ')
@@ -84,7 +82,6 @@ class Analyzer(object):
         Return:
             counts (list) : positive and negative counts per sentence
         """
-        text = neologdn.normalize(text)
         counts = []
         for sentence in sengiri.tokenize(text):
             count = {'positive': 0, 'negative': 0}
@@ -104,7 +101,6 @@ class Analyzer(object):
         Return:
             scores (list) : scores per sentence
         """
-        text = neologdn.normalize(text)
         scores = []
         for sentence in sengiri.tokenize(text):
             polarities = self._calc_sentiment_polarity(sentence)
@@ -121,7 +117,6 @@ class Analyzer(object):
         Return:
             results (list) : analysis results
         """
-        text = neologdn.normalize(text)
         results = []
         for sentence in sengiri.tokenize(text):
             polarities = self._calc_sentiment_polarity(sentence)

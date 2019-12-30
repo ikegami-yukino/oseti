@@ -38,7 +38,7 @@ setup(
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),
                                    open('CHANGES.rst', encoding='utf8').read()),
     package_data={'oseti': ['dic/*.json']},
-    install_requires=['sengiri', 'neologdn'] + install_requires,
+    install_requires=['sengiri'] + install_requires,
     tests_require=['nose'],
     test_suite='nose.collector'
 )
