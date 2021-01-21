@@ -103,7 +103,7 @@ class Analyzer(object):
             scores (list) : scores per sentence
         """
         scores = []
-        for sentence in sengiri.tokenize(text):
+        for sentence in sengiri.tokenize(text, self.mecab_args):
             polarities = self._calc_sentiment_polarity(sentence)
             if polarities:
                 scores.append(sum(p[1] for p in polarities) / len(polarities))
