@@ -119,7 +119,7 @@ class Analyzer(object):
             results (list) : analysis results
         """
         results = []
-        for sentence in sengiri.tokenize(text):
+        for sentence in sengiri.tokenize(text, self.mecab_args):
             polarities = self._calc_sentiment_polarity(sentence)
             if polarities:
                 result = {
