@@ -17,6 +17,7 @@ class Analyzer(object):
         self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
         self.tagger = MeCab.Tagger(mecab_args)
         self.tagger.parse('')  # for avoiding bug
+        self.mecab_args = mecab_args
 
     def _lookup_wago(self, lemma, lemmas):
         if lemma in self.wago_dict:
@@ -83,7 +84,7 @@ class Analyzer(object):
             counts (list) : positive and negative counts per sentence
         """
         counts = []
-        for sentence in sengiri.tokenize(text):
+        for sentence in sengiri.tokenize(text, self.mecab_args):
             count = {'positive': 0, 'negative': 0}
             polarities = self._calc_sentiment_polarity(sentence)
             for polarity in polarities:
