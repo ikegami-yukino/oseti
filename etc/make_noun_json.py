@@ -10,9 +10,8 @@ with open(PATH) as fd:
     word_dict = {}
     for line in fd:
         word, polarity, word_type = line.split('\t')
-        if polarity == 'e':
+        if polarity == 'e' or polarity == '?p?n':
             continue
         word = neologdn.normalize(word)
         word_dict.update({word: polarity})
     json.dump(word_dict, open('pn_noun.json', 'w'))
-

@@ -6,9 +6,10 @@ with open(PATH) as fd:
     wago_dict = {}
     for line in fd:
         try:
-            polarity, word = line.rstrip().split('\t')
+            (polarity, word) = line.rstrip().split('\t')
             word = word.replace(' だ', '').replace(' と', '').replace(' の', '').replace(' です', '')
-            word = word.replace(' ある', '')
+            if word.endswith(' ある') or word.endswith(' ない'):
+                continue
         except:
             continue
         wago_dict[word] = polarity
