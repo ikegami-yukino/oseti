@@ -3,7 +3,7 @@ import json
 import os
 
 import MeCab
-import sengiri
+from bunkai import Bunkai
 
 NEGATION = ('ない', 'ず', 'ぬ')
 PARELLEL_PARTICLES = ('か', 'と', 'に', 'も', 'や', 'とか', 'だの', 'なり', 'やら')
@@ -17,7 +17,7 @@ class Analyzer(object):
         self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
         self.tagger = MeCab.Tagger(mecab_args)
         self.tagger.parse('')  # for avoiding bug
-        self.mecab_args = mecab_args
+        self.bunkai = Bunkai()
 
     def _lookup_wago(self, lemma, lemmas):
         if lemma in self.wago_dict:
@@ -84,7 +84,7 @@ class Analyzer(object):
             counts (list) : positive and negative counts per sentence
         """
         counts = []
-        for sentence in sengiri.tokenize(text, self.mecab_args):
+        for sentence in self.bunkai(text):
             count = {'positive': 0, 'negative': 0}
             polarities = self._calc_sentiment_polarity(sentence)
             for polarity in polarities:
@@ -103,7 +103,7 @@ class Analyzer(object):
             scores (list) : scores per sentence
         """
         scores = []
-        for sentence in sengiri.tokenize(text, self.mecab_args):
+        for sentence in self.bunkai(text):
             polarities = self._calc_sentiment_polarity(sentence)
             if polarities:
                 scores.append(sum(p[1] for p in polarities) / len(polarities))
@@ -119,7 +119,7 @@ class Analyzer(object):
             results (list) : analysis results
         """
         results = []
-        for sentence in sengiri.tokenize(text, self.mecab_args):
+        for sentence in self.bunkai(text):
             polarities = self._calc_sentiment_polarity(sentence)
             if polarities:
                 result = {

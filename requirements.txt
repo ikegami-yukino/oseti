@@ -1,2 +1,3 @@
-mecab-python3==0.7
+mecab
 neologdn
+bunkai
