@@ -30,10 +30,10 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install MeCab
-        command: |
-          apt-get update;
-          apt-get -y install mecab libmecab-dev mecab-ipadic-utf8
+          name: Install MeCab
+          command: |
+            apt-get update;
+            apt-get -y install mecab libmecab-dev mecab-ipadic-utf8
       - python/install-packages:
           pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
