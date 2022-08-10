@@ -41,6 +41,6 @@ setup(
                                    open('CHANGES.rst', encoding='utf8').read()),
     package_data={'oseti': ['dic/*.json']},
     install_requires=['sengiri'] + install_requires,
-    tests_require=['nose'],
-    test_suite='nose.collector'
+    tests_require=['pytest'],
+    test_suite='pytest'
 )
