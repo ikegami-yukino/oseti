@@ -1,11 +1,11 @@
 CHANGES
 =======
 
-0.3 (2022-08-10)
+0.3.1 (2022-08-17)
 ------------------
 
 - Improve dictionaries
-- Use Bunkai module istead of sengiri
+- Use Bunkai module instead of sengiri
 
 0.2 (2019-10-07)
 ------------------
