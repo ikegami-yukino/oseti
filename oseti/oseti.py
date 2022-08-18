@@ -12,9 +12,13 @@ DICT_DIR = os.path.join(os.path.dirname(__file__), 'dic')
 
 class Analyzer(object):
 
-    def __init__(self, mecab_args=''):
+    def __init__(self, mecab_args='', word_dict={}, wago_dict={}):
         self.word_dict = json.load(open(os.path.join(DICT_DIR, 'pn_noun.json')))
+        if word_dict:
+            self.word_dict.update(word_dict)
         self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
+        if wago_dict:
+            self.wago_dict.update(wago_dict)
         self.tagger = MeCab.Tagger(mecab_args)
         self.tagger.parse('')  # for avoiding bug
         self.bunkai = Bunkai()

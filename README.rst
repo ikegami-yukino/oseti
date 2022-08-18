@@ -35,6 +35,18 @@ USAGE
   analyzer.analyze_detail('お金がないわけではない')
   # => [{'positive': ['お金'], 'negative': [], 'score': 1.0}]
 
+  # Applying user's dictionary
+  analyzer = oseti.Analyzer(word_dict={'カワイイ': 'p', 'ブサイク': 'n'},
+                            wago_dict={'イカ する': 'ポジ', 'まがまがしい': 'ネガ'})
+  analyzer.analyze_detail("カワイイ")
+  # => [{'positive': ['カワイイ'], 'negative': [], 'score': 1.0}]
+  analyzer.analyze_detail("ブサイクだ")
+  # => [{'positive': [], 'negative': ['ブサイク'], 'score': -1.0}]
+  analyzer.analyze_detail("まがまがしい")
+  # => [{'positive': [], 'negative': ['まがまがしい'], 'score': -1.0}]
+  analyzer.analyze_detail("イカすよ")
+  # => [{'positive': ['イカ する'], 'negative': [], 'score': 1.0}]
+
 ACKNOWLEDGEMENT
 =================
 
