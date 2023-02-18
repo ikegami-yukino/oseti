@@ -13,10 +13,12 @@ DICT_DIR = os.path.join(os.path.dirname(__file__), 'dic')
 class Analyzer(object):
 
     def __init__(self, mecab_args='', word_dict={}, wago_dict={}):
-        self.word_dict = json.load(open(os.path.join(DICT_DIR, 'pn_noun.json')))
+        self.word_dict = json.load(open(os.path.join(DICT_DIR,
+                                                     'pn_noun.json')))
         if word_dict:
             self.word_dict.update(word_dict)
-        self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
+        self.wago_dict = json.load(open(os.path.join(DICT_DIR,
+                                                     'pn_wago.json')))
         if wago_dict:
             self.wago_dict.update(wago_dict)
         self.tagger = MeCab.Tagger(mecab_args)
@@ -54,12 +56,16 @@ class Analyzer(object):
                 else:
                     wago = self._lookup_wago(lemma, lemmas)
                     if wago:
-                        polarity = 1 if self.wago_dict[wago].startswith('ポジ') else -1
+                        if self.wago_dict[wago].startswith('ポジ'):
+                            polarity = 1
+                        else:
+                            polarity = -1
                     else:
                         polarity = None
                 if polarity:
                     polarities.append([wago or lemma, polarity])
-                elif polarities and surface in NEGATION and not self._has_arujanai(sentence[:substr_count]):
+                elif polarities and surface in NEGATION and \
+                        not self._has_arujanai(sentence[:substr_count]):
                     polarities[-1][1] *= -1
                     if polarities[-1][0].endswith('-NEGATION'):
                         polarities[-1][0] = polarities[-1][0][:-9]
@@ -67,8 +73,12 @@ class Analyzer(object):
                         polarities[-1][0] += '-NEGATION'
                     # parallel negation
                     if n_parallel and len(polarities) > 1:
-                        n_parallel = len(polarities) if len(polarities) > n_parallel else n_parallel + 1
-                        n_parallel = n_parallel + 1 if len(polarities) == n_parallel else n_parallel
+                        if len(polarities) > n_parallel:
+                            n_parallel = len(polarities)
+                        else:
+                            n_parallel = n_parallel + 1
+                        if len(polarities) == n_parallel:
+                            n_parallel = n_parallel + 1
                         for i in range(2, n_parallel):
                             polarities[-i][1] *= -1
                             if polarities[-i][0].endswith('-NEGATION'):
