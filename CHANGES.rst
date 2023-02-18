@@ -1,10 +1,13 @@
 CHANGES
 =======
 
-0.4 (2022-08-18)
+0.4.1 (2023-02-19)
 ------------------
 
 - Enable user's dictionary
+- Solve install issue
+- Support Python 3.11
+- PEP8
 
 0.3.1 (2022-08-17)
 ------------------
