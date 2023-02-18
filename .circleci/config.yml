@@ -36,6 +36,8 @@ jobs:
             sudo apt-get -y install mecab libmecab-dev mecab-ipadic-utf8
       - python/install-packages:
           pkg-manager: pip
+      - python/install-packages:
+          pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
           pip-dependency-file: test_requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
