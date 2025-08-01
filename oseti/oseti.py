@@ -9,21 +9,41 @@ NEGATION = ('ない', 'ず', 'ぬ')
 PARELLEL_PARTICLES = ('か', 'と', 'に', 'も', 'や', 'とか', 'だの', 'なり', 'やら')
 DICT_DIR = os.path.join(os.path.dirname(__file__), 'dic')
 
+HOME_BREW_MECABRC_PATH = '/opt/homebrew/etc/mecabrc'
+DEFAULT_MECABRC_PATH = '/usr/local/etc/mecabrc'
+
 
 class Analyzer(object):
 
     def __init__(self, mecab_args='', word_dict={}, wago_dict={}):
-        self.word_dict = json.load(open(os.path.join(DICT_DIR,
-                                                     'pn_noun.json')))
+        self.word_dict = json.load(open(os.path.join(DICT_DIR, 'pn_noun.json')))
         if word_dict:
             self.word_dict.update(word_dict)
-        self.wago_dict = json.load(open(os.path.join(DICT_DIR,
-                                                     'pn_wago.json')))
+        self.wago_dict = json.load(open(os.path.join(DICT_DIR, 'pn_wago.json')))
         if wago_dict:
             self.wago_dict.update(wago_dict)
-        self.tagger = MeCab.Tagger(mecab_args)
-        self.tagger.parse('')  # for avoiding bug
+        self.tagger = self.create_macab_tagger(mecab_args)
         self.bunkai = Bunkai()
+
+    def create_macab_tagger(self, mecab_args):
+        try:
+            if '-r' not in mecab_args:
+                if os.getenv('MECABRC'):
+                    mecab_args += ' -r ' + os.environ['MECABRC']
+                elif os.path.exists(HOME_BREW_MECABRC_PATH) and not os.path.exists(DEFAULT_MECABRC_PATH):
+                    mecab_args += ' -r ' + HOME_BREW_MECABRC_PATH
+            tagger = MeCab.Tagger(mecab_args)
+        except Exception as e:
+            if isinstance(e, RuntimeError):
+                message = str(e)
+                if ('[ifs] no such file or directory:' in message) and ('/mecabrc' in message):
+                    new_message = 'Please specify the "mecabrc" file with the -r option in "mecab_args".'
+                    new_message += ' For example, "-r ' + DEFAULT_MECABRC_PATH + '".'
+                    raise RuntimeError(new_message)
+            else:
+                raise e
+        tagger.parse('')  # for avoiding bug
+        return tagger
 
     def _lookup_wago(self, lemma, lemmas):
         if lemma in self.wago_dict:
