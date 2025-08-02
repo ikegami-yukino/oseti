@@ -1,62 +1,56 @@
-oseti
-==========
-|pyversion| |version| |license|
+# oseti
 
-!WARNING! This documentation is deprecated. See https://github.com/ikegami-yukino/oseti/blob/master/README.md
+[![PyPI Downloads](https://static.pepy.tech/badge/oseti)](https://pepy.tech/projects/oseti)[![PyPI - Version](https://img.shields.io/pypi/v/oseti)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/oseti)![PyPI - License](https://img.shields.io/pypi/l/oseti)](http://pypi.python.org/pypi/oseti/)
 
 Dictionary based Sentiment Analysis for Japanese
 
-INSTALLATION
-==============
+## INSTALLATION
 
-::
-
- $ pip install oseti
+```sh
+pip install oseti
+```
 
 If encountered "AttributeError: module 'emoji' has no attribute 'UNICODE_EMOJI'", then execute the following command:
 
-::
+```sh
+pip install --ignore-requires-python -U bunkai
+```
 
- $ pip install --ignore-requires-python -U bunkai
+## USAGE
 
+```python
+import oseti
 
-USAGE
-============
+analyzer = oseti.Analyzer()
+analyzer.analyze('天国で待ってる。')
+# => [1.0]
+analyzer.analyze('遅刻したけど楽しかったし嬉しかった。すごく充実した！')
+# => [0.3333333333333333, 1.0]
 
-.. code:: python
+analyzer.count_polarity('遅刻したけど楽しかったし嬉しかった。すごく充実した！')
+# => [{'positive': 2, 'negative': 1}, {'positive': 1, 'negative': 0}])
+analyzer.count_polarity('そこにはいつもと変わらない日常があった。')
+# => [{'positive': 0, 'negative': 0}]
 
-  import oseti
+analyzer.analyze_detail('お金も希望もない！')
+# => [{'positive': [], 'negative': ['お金-NEGATION', '希望-NEGATION'], 'score': -1.0}])
+analyzer.analyze_detail('お金がないわけではない')
+# => [{'positive': ['お金'], 'negative': [], 'score': 1.0}]
 
-  analyzer = oseti.Analyzer()
-  analyzer.analyze('天国で待ってる。')
-  # => [1.0]
-  analyzer.analyze('遅刻したけど楽しかったし嬉しかった。すごく充実した！')
-  # => [0.3333333333333333, 1.0]
+# Applying user's dictionary
+analyzer = oseti.Analyzer(word_dict={'カワイイ': 'p', 'ブサイク': 'n'},
+                        wago_dict={'イカ する': 'ポジ', 'まがまがしい': 'ネガ'})
+analyzer.analyze_detail("カワイイ")
+# => [{'positive': ['カワイイ'], 'negative': [], 'score': 1.0}]
+analyzer.analyze_detail("ブサイクだ")
+# => [{'positive': [], 'negative': ['ブサイク'], 'score': -1.0}]
+analyzer.analyze_detail("まがまがしい")
+# => [{'positive': [], 'negative': ['まがまがしい'], 'score': -1.0}]
+analyzer.analyze_detail("イカすよ")
+# => [{'positive': ['イカ する'], 'negative': [], 'score': 1.0}]
+```
 
-  analyzer.count_polarity('遅刻したけど楽しかったし嬉しかった。すごく充実した！')
-  # => [{'positive': 2, 'negative': 1}, {'positive': 1, 'negative': 0}])
-  analyzer.count_polarity('そこにはいつもと変わらない日常があった。')
-  # => [{'positive': 0, 'negative': 0}]
-
-  analyzer.analyze_detail('お金も希望もない！')
-  # => [{'positive': [], 'negative': ['お金-NEGATION', '希望-NEGATION'], 'score': -1.0}])
-  analyzer.analyze_detail('お金がないわけではない')
-  # => [{'positive': ['お金'], 'negative': [], 'score': 1.0}]
-
-  # Applying user's dictionary
-  analyzer = oseti.Analyzer(word_dict={'カワイイ': 'p', 'ブサイク': 'n'},
-                            wago_dict={'イカ する': 'ポジ', 'まがまがしい': 'ネガ'})
-  analyzer.analyze_detail("カワイイ")
-  # => [{'positive': ['カワイイ'], 'negative': [], 'score': 1.0}]
-  analyzer.analyze_detail("ブサイクだ")
-  # => [{'positive': [], 'negative': ['ブサイク'], 'score': -1.0}]
-  analyzer.analyze_detail("まがまがしい")
-  # => [{'positive': [], 'negative': ['まがまがしい'], 'score': -1.0}]
-  analyzer.analyze_detail("イカすよ")
-  # => [{'positive': ['イカ する'], 'negative': [], 'score': 1.0}]
-
-ACKNOWLEDGEMENT
-=================
+## ACKNOWLEDGEMENT
 
 This module uses 日本語評価極性辞書（用言編）ver.1.0 and 日本語評価極性辞書（名詞編）ver.1.0.
 
@@ -66,11 +60,10 @@ I appreciate people involved in these data.
 
 - 東山昌彦, 乾健太郎, 松本裕治. 述語の選択選好性に着目した名詞評価極性の獲得. 言語処理学会第14回年次大会論文集, pp.584-587, 2008. / Masahiko Higashiyama, Kentaro Inui, Yuji Matsumoto. Learning Sentiment of Nouns from Selectional Preferences of Verbs and Adjectives. Proceedings of the 14th Annual Meeting of the Association for Natural Language Processing, pp.584-587, 2008.
 
-Cited by
-=========
+## Cited by
 
-Scientific paper
------------------
+### Scientific paper
+
 - 丸山 正人, 竹川 高志. 個人の特性を反映した文章の類似度判定による小説推薦. DEIM Forum 2020, P2-26, 2020.
 - Yoshihiro Adachi and Negishi Takanori. Development and evaluation of a real-time analysis method for free-description questionnaire responses. 2020 15th International Conference on Computer Science & Education (ICCSE), p. 78-82, 2020.
 - Uģis Nastevičs. THE IMAGE OF LATVIA AND LATVIANS ON JAPANESE TWITTER: REFLECTIONS ON PEOPLE. Culture Crossroads, Vol. 17, p.93-113, 2021.
@@ -87,24 +80,13 @@ Scientific paper
 - Tomoyuki Kobayashi, Koki Yamada, Michio Murakami, Akihiko Ozaki, Hiroyuki A. Torii, and Kazuko Uno. Assessment of attitudes toward critical actors during public health crises. International Journal of Disaster Risk Reduction, Vol. 108, 2024.
 - Feby Juana Candra, Aika Shiro, Yingting Chen, Taro Kanno, Satori Hachisuka, Yuta Yoshino, and Shuhei Watanabe. Fostering Creativity Through Behavioral and Emotional Insights in Meetings. In: International Conference on Human-Computer Interaction, p. 273-286, 2025.
 
-Slide
-------
+### Slide
+
 - Python ライブラリ開発における失敗談 〜開発者に選ばれるライブラリを作るために必要なこと〜 / pycon-jp-2022: https://speakerdeck.com/taishii/pycon-jp-2022
 
-Blog
------
+### Blog
+
 - 肯否分析 [自然言語処理の餅屋]: https://www.jnlp.org/nlp/%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%83%9E%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0/%E8%82%AF%E5%90%A6%E5%88%86%E6%9E%90
 - メンヘラがツイートを形態素解析して気分の波を調べた結果www #Python - Qiita: https://qiita.com/yusuke_astro/items/dc38802b81f348189a98
 - AKIBA.AWS ONLINE #09で「Amazon Comprehendから始める感情分析」について話しました #AKIBAAWS | DevelopersIO: https://dev.classmethod.jp/articles/talking-about-amazon-comprehend-and-sentiment-analysis-in-akiba-aws-online-09/
 - Slackのtimesにネガポジ分析を掛けて1年を振り返る - susunshunのお粗末な記録: https://susunshun.hatenablog.com/entry/2019/12/25/173221
-
-
-.. |pyversion| image:: https://img.shields.io/pypi/pyversions/oseti.svg
-
-.. |version| image:: https://img.shields.io/pypi/v/oseti.svg
-    :target: http://pypi.python.org/pypi/oseti/
-    :alt: latest version
-
-.. |license| image:: https://img.shields.io/pypi/l/oseti.svg
-    :target: http://pypi.python.org/pypi/oseti/
-    :alt: license

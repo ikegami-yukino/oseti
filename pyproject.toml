@@ -1,0 +1,55 @@
+[build-system]
+requires = [
+    "setuptools>=60",
+    "setuptools-scm>=8.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oseti"
+dynamic = ["version", "dependencies"]
+authors = [
+    {name = "Yukino Ikegami", email = "yknikgm@gmail.com"}
+]
+maintainers = [
+    {name = "Yukino Ikegami", email = "yknikgm@gmail.com"}
+]
+description = "Dictionary based Sentiment Analysis for Japanese language"
+readme = "README.md"
+keywords = ["sentiment analysis", "japanese", "textpreprocessing", "JapaneseText"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Developers",
+    "Natural Language :: Japanese",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "oseti.__version__"}
+
+[project.urls]
+Homepage = "https://github.com/ikegami-yukino/oseti"
+Repository = "https://github.com/ikegami-yukino/oseti.git"
+Issues = "https://github.com/ikegami-yukino/oseti/issues"
+Changelog = "https://github.com/ikegami-yukino/oseti/blob/master/CHANGELOG.md"
+
+[tool.setuptools.package-data]
+oseti = ["dic/*.json"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["test_oseti.py"]
