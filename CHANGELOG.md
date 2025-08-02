@@ -1,9 +1,10 @@
 # CHANGES
 
-## 0.4.3 (2025-08-02)
+## 0.4.3.1 (2025-08-02)
 
 - Resolve mecabrc not found issue
 - Support Python 3.12, 3.13
+- Drop supporting Python 3.8
 - Migrate packaging solution from setup.py to pyproject.toml
 
 ## 0.4.2 (2023-02-19)
